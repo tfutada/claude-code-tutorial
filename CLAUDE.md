@@ -35,3 +35,13 @@ Next.js 16 application with TypeScript, React 19, and Tailwind CSS v4. Uses App 
 - Kill existing dev server before starting new one
 - Pages with useState/event handlers require `"use client"`
 - TypeScript strict mode enabled
+
+## MCP Servers
+
+### Serena (Semantic Code Retrieval & Editing)
+Install via Claude Code CLI:
+```bash
+claude mcp add serena -- uvx --from git+https://github.com/oraios/serena serena-mcp-server --context ide-assistant --project $(pwd)
+```
+
+**Note**: Serena uses Python/uv, NOT npm. Configuration stored in `~/.claude.json` (global).
