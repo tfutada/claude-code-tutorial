@@ -36,6 +36,54 @@ Next.js 16 application with TypeScript, React 19, and Tailwind CSS v4. Uses App 
 - Pages with useState/event handlers require `"use client"`
 - TypeScript strict mode enabled
 
+## Claude Skills
+
+Skills are reusable task templates that extend Claude Code's capabilities for project-specific workflows.
+
+### Creating a Skill
+1. Create `.claude/skills/` directory in project root
+2. Add a markdown file: `.claude/skills/{skill-name}.md`
+3. Write task instructions in the file
+
+### Skill File Structure
+```markdown
+---
+name: skill-name
+description: Brief description of what this skill does
+tags: [tag1, tag2]
+---
+
+# Skill Name
+
+Detailed explanation of the skill.
+
+## Instructions
+- Step-by-step instructions
+- Can include code examples
+- Reference project-specific patterns
+```
+
+**YAML Frontmatter Fields:**
+- `name` - Skill identifier (required)
+- `description` - Brief summary shown in skill list (required)
+- `tags` - Array of categorization tags (optional)
+
+### Using Skills
+Invoke with: `@{skill-name}` in conversation or via Skill tool
+
+### Example Skill
+`.claude/skills/check-newsapi.md`:
+```markdown
+# Check NewsAPI Connectivity
+
+Test NewsAPI.org authentication and connectivity.
+
+## Steps
+1. Check for NEXT_PUBLIC_NEWS_API_KEY in .env.local
+2. Make test API request to NewsAPI
+3. Report connection status and any errors
+```
+
 ## MCP Servers
 
 ### Serena (Semantic Code Retrieval & Editing)
