@@ -84,6 +84,36 @@ Test NewsAPI.org authentication and connectivity.
 3. Report connection status and any errors
 ```
 
+## Slash Commands
+
+Custom commands for common workflows in this project.
+
+### Creating a Slash Command
+1. Create `.claude/commands/` directory in project root
+2. Add a markdown file: `.claude/commands/{command-name}.md`
+3. Write instructions for Claude to execute
+
+### Command File Structure
+```markdown
+---
+description: Brief description shown in command list
+---
+
+# Command Title
+
+Detailed instructions for Claude to follow when this command is invoked.
+
+## Steps
+1. First step
+2. Second step
+```
+
+### Using Commands
+Invoke with: `/{command-name}` in conversation
+
+### Available Commands
+- `/commit` - Commit current changes following git best practices
+
 ## MCP Servers
 
 ### Serena (Semantic Code Retrieval & Editing)

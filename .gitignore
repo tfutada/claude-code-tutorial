@@ -42,6 +42,5 @@ next-env.d.ts
 
 .idea/
 .vscode/
-.claude
-!.claude/skills
+.claude/settings.local.json
 .serena
