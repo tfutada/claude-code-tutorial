@@ -16,7 +16,13 @@ Next.js 16 application with TypeScript, React 19, and Tailwind CSS v4. Uses App 
 ### App Router Structure
 - `src/app/page.tsx` - Home page (client component with state)
 - `src/app/about/page.tsx` - About page (client component)
+- `src/app/blog/page.tsx` - Blog list (client component, SPA pattern)
+- `src/app/blog/[id]/page.tsx` - Blog detail (client component, SPA pattern)
 - `src/app/layout.tsx` - Root layout with Geist fonts
+
+### Components
+- `src/components/nav.tsx` - Shared navigation component
+- `src/components/counter.tsx` - Counter component example
 
 ### Import Aliases
 - `@/*` maps to `./src/*` (configured in tsconfig.json)
@@ -27,9 +33,10 @@ Next.js 16 application with TypeScript, React 19, and Tailwind CSS v4. Uses App 
 - Custom fonts: Geist Sans + Geist Mono (next/font/google)
 
 ### Component Patterns
-- Client components use `"use client"` directive
-- Pages that need interactivity (useState, onClick, etc.) must be client components
-- Shared navigation duplicated in page.tsx and about/page.tsx (no shared component yet)
+- All pages use `"use client"` directive (SPA architecture)
+- Data fetching via useEffect + fetch (client-side)
+- Loading states embedded in components (no loading.tsx files)
+- Blog pages fetch from JSONPlaceholder API with artificial delays for demo
 
 ## Important Notes
 - Kill existing dev server before starting new one
