@@ -52,6 +52,9 @@ type PageProps = {
 export default async function BlogPostPage({ params }: PageProps) {
   const { id } = await params;
 
+  // Artificial delay to demonstrate loading state (educational purpose)
+  await new Promise((resolve) => setTimeout(resolve, 1500));
+
   // Fetch post and comments in parallel
   const [post, comments] = await Promise.all([
     getPost(id),
