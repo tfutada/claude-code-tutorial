@@ -9,7 +9,7 @@ type Post = {
 
 async function getPosts(): Promise<Post[]> {
   // Artificial delay to demonstrate loading state (educational purpose)
-  await new Promise((resolve) => setTimeout(resolve, 2000));
+  await new Promise((resolve) => setTimeout(resolve, 5000));
 
   const res = await fetch("https://jsonplaceholder.typicode.com/posts", {
     cache: "no-store", // Dynamic rendering - fresh data on each request
