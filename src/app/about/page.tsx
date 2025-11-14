@@ -1,28 +1,10 @@
-"use client";
-
 import Image from "next/image";
+import Nav from "@/components/nav";
 
 export default function About() {
   return (
     <div className="flex min-h-screen flex-col bg-zinc-50 font-sans dark:bg-black">
-      <nav className="sticky top-0 z-50 border-b border-zinc-200 bg-white dark:border-zinc-800 dark:bg-black">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <div className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
-            Logo
-          </div>
-          <div className="flex gap-6">
-            <a href="/" className="text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50">
-              Home
-            </a>
-            <a href="/about" className="text-sm font-medium text-zinc-900 dark:text-zinc-50">
-              About
-            </a>
-            <a href="#" className="text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50">
-              Contact
-            </a>
-          </div>
-        </div>
-      </nav>
+      <Nav />
       <div className="flex flex-1 items-center justify-center">
         <main className="flex w-full max-w-3xl flex-col gap-8 py-32 px-16">
           <div className="flex items-center gap-4">

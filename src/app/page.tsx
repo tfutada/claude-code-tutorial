@@ -1,30 +1,11 @@
-"use client";
-
 import Image from "next/image";
-import { useState } from "react";
+import Counter from "@/components/counter";
+import Nav from "@/components/nav";
 
 export default function Home() {
-  const [count, setCount] = useState(0);
   return (
     <div className="flex min-h-screen flex-col bg-zinc-50 font-sans dark:bg-black">
-      <nav className="sticky top-0 z-50 border-b border-zinc-200 bg-white dark:border-zinc-800 dark:bg-black">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-          <div className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
-            Logo
-          </div>
-          <div className="flex gap-6">
-            <a href="/" className="text-sm font-medium text-zinc-900 dark:text-zinc-50">
-              Home
-            </a>
-            <a href="/about" className="text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50">
-              About
-            </a>
-            <a href="#" className="text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50">
-              Contact
-            </a>
-          </div>
-        </div>
-      </nav>
+      <Nav />
       <div className="flex flex-1 items-center justify-center">
         <main className="flex w-full max-w-3xl flex-col items-center justify-between gap-16 py-32 px-16 sm:items-start">
         <Image
@@ -81,12 +62,7 @@ export default function Home() {
           >
             Documentation
           </a>
-          <button
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            onClick={() => setCount(count + 1)}
-          >
-            Counter: {count}
-          </button>
+          <Counter />
         </div>
       </main>
       </div>
