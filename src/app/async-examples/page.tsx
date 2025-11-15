@@ -314,7 +314,7 @@ export default function AsyncExamples() {
               <h2 className="text-2xl font-semibold mb-4 text-yellow-800 dark:text-yellow-200">
                 ✅ Alternative: Chunked Processing
               </h2>
-              <p className="mb-4">Split into chunks → UI doesn't completely freeze</p>
+              <p className="mb-4">Split into chunks → UI does&#39;t completely freeze</p>
               <div className="mb-4 flex items-center gap-3">
                 <label htmlFor="chunk-fib" className="text-sm font-medium">
                   Fibonacci(n):
