@@ -18,25 +18,74 @@ export default function Home() {
         />
         <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
           <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-red-600">
-            Hello World!
+            React Hooks Tutorial
           </h1>
           <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+            Learn React Hooks deeply with interactive examples and explanations.
           </p>
+
+          {/* Hooks Examples Grid */}
+          <div className="w-full max-w-2xl grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+            <a
+              href="/hooks/use-state-example"
+              className="p-4 border border-zinc-200 dark:border-zinc-800 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
+            >
+              <h3 className="font-semibold text-zinc-950 dark:text-zinc-50 mb-1">useState</h3>
+              <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                Basic state management, counters, forms, arrays, objects
+              </p>
+            </a>
+
+            <a
+              href="/hooks/use-effect-example"
+              className="p-4 border border-zinc-200 dark:border-zinc-800 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
+            >
+              <h3 className="font-semibold text-zinc-950 dark:text-zinc-50 mb-1">useEffect</h3>
+              <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                Side effects, data fetching, subscriptions, cleanup
+              </p>
+            </a>
+
+            <a
+              href="/hooks/use-context-example"
+              className="p-4 border border-zinc-200 dark:border-zinc-800 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
+            >
+              <h3 className="font-semibold text-zinc-950 dark:text-zinc-50 mb-1">useContext</h3>
+              <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                Global state, avoid prop drilling, theme & auth examples
+              </p>
+            </a>
+
+            <a
+              href="/hooks/advanced-hooks"
+              className="p-4 border border-zinc-200 dark:border-zinc-800 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
+            >
+              <h3 className="font-semibold text-zinc-950 dark:text-zinc-50 mb-1">Advanced Hooks</h3>
+              <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                useRef, useMemo, useCallback, useReducer
+              </p>
+            </a>
+
+            <a
+              href="/hooks/custom-hooks-example"
+              className="p-4 border border-zinc-200 dark:border-zinc-800 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
+            >
+              <h3 className="font-semibold text-zinc-950 dark:text-zinc-50 mb-1">Custom Hooks</h3>
+              <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                useLocalStorage, useFetch, useDebounce, useToggle, useWindowSize
+              </p>
+            </a>
+
+            <a
+              href="/async-examples"
+              className="p-4 border border-zinc-200 dark:border-zinc-800 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
+            >
+              <h3 className="font-semibold text-zinc-950 dark:text-zinc-50 mb-1">Async/Await Examples</h3>
+              <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                I/O vs CPU tasks, Web Workers, chunking, performance
+              </p>
+            </a>
+          </div>
         </div>
         <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
           <a
