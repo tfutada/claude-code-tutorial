@@ -4,12 +4,10 @@ import { useState, useEffect } from "react"
 import Nav from '@/components/nav'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
 
 export default function UseEffectExample() {
   // Example 1: Run on every render
   const [count, setCount] = useState(0)
-  const [renderCount, setRenderCount] = useState(0)
 
   // Example 2: Run once on mount
   const [mountTime, setMountTime] = useState("")
@@ -17,53 +15,66 @@ export default function UseEffectExample() {
   // Example 3: Run when dependency changes
   const [userId, setUserId] = useState(1)
   const [userData, setUserData] = useState<any>(null)
-  const [loading, setLoading] = useState(false)
 
   // Example 4: Cleanup function
   const [seconds, setSeconds] = useState(0)
   const [isTimerRunning, setIsTimerRunning] = useState(false)
 
   // Example 5: Multiple effects
-  const [windowWidth, setWindowWidth] = useState(0)
+  const [windowWidth, setWindowWidth] = useState(
+    typeof window !== 'undefined' ? window.innerWidth : 0
+  )
 
   // Example 6: Async data fetching
   const [posts, setPosts] = useState<any[]>([])
 
   // Effect 1: Runs on EVERY render (no dependency array)
-  // Safety limit to prevent infinite loop while still demonstrating the concept
+  // No state update to avoid infinite loop - just logs to demonstrate
   useEffect(() => {
-    if (renderCount < 5) {
-      setRenderCount(prev => prev + 1)
-      console.log("Effect 1: Runs on every render")
-    }
+    console.log("Effect 1: Runs on every render - count is", count)
   })
 
   // Effect 2: Runs ONCE on mount (empty dependency array)
   useEffect(() => {
     const time = new Date().toLocaleTimeString("ja-JP")
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMountTime(time)
     console.log("Effect 2: Runs only once on mount at", time)
   }, [])
 
   // Effect 3: Runs when userId changes
   useEffect(() => {
-    if (userId) {
-      setLoading(true)
-      console.log(`Effect 3: Re-running because userId changed to ${userId}`)
+    if (!userId) return
 
-      fetch(`https://jsonplaceholder.typicode.com/users/${userId}`)
-        .then(res => res.json())
-        .then(data => {
+    console.log(`Effect 3: Re-running because userId changed to ${userId}`)
+
+    let cancelled = false
+
+    // Start loading by clearing userData first (loading derived from !userData)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setUserData(null)
+
+    fetch(`https://jsonplaceholder.typicode.com/users/${userId}`)
+      .then(res => res.json())
+      .then(data => {
+        if (!cancelled) {
           setUserData(data)
-          setLoading(false)
           console.log(`Effect 3: Fetched data for user ${userId}`)
-        })
-        .catch(err => {
+        }
+      })
+      .catch(err => {
+        if (!cancelled) {
           console.error(err)
-          setLoading(false)
-        })
+        }
+      })
+
+    return () => {
+      cancelled = true
     }
   }, [userId])
+
+  // Derive loading state instead of storing it
+  const loading = userData === null
 
   // Effect 4: Cleanup with setInterval
   useEffect(() => {
@@ -92,8 +103,6 @@ export default function UseEffectExample() {
       console.log(`Effect 5: Window resized to ${window.innerWidth}px`)
     }
 
-    // Set initial width
-    setWindowWidth(window.innerWidth)
     console.log("Effect 5: Event listener added on mount")
     window.addEventListener("resize", handleResize)
 
@@ -141,7 +150,7 @@ export default function UseEffectExample() {
                   Increment Count: {count}
                 </Button>
                 <span className="text-sm text-muted-foreground">
-                  This component has rendered {renderCount} times (capped at 5 to prevent crash)
+                  Check console - effect logs on every click!
                 </span>
               </div>
             </div>
@@ -153,7 +162,7 @@ export default function UseEffectExample() {
             </pre>
             <div className="mt-4 p-3 bg-destructive/10 border border-destructive/20 rounded-lg text-sm">
               ⚠️ Warning: Without dependencies, this effect runs on EVERY render.
-              If you update state inside, it causes infinite loop! (capped at 5 for demo safety)
+              If you update state inside, it causes infinite loop!
             </div>
           </CardContent>
         </Card>
@@ -350,7 +359,7 @@ useEffect(() => {
               <li><strong>Cleanup</strong>: Return function to cleanup subscriptions/timers/listeners</li>
               <li><strong>Infinite loops</strong>: Be careful with state updates inside effects</li>
               <li><strong>Multiple effects</strong>: Split different concerns into separate useEffect calls</li>
-              <li><strong>Async</strong>: Can't make useEffect callback async directly, use inner async function</li>
+              <li><strong>Async</strong>: Can&apos;t make useEffect callback async directly, use inner async function</li>
             </ul>
           </CardContent>
         </Card>
