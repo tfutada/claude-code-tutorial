@@ -1,7 +1,10 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import Link from "next/link"
+import Nav from '@/components/nav'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
 
 export default function UseEffectExample() {
   // Example 1: Run on every render
@@ -31,7 +34,7 @@ export default function UseEffectExample() {
   useEffect(() => {
     if (renderCount < 5) {
       setRenderCount(prev => prev + 1)
-      console.log("Effect 1: Component rendered")
+      console.log("Effect 1: Runs on every render")
     }
   })
 
@@ -39,20 +42,21 @@ export default function UseEffectExample() {
   useEffect(() => {
     const time = new Date().toLocaleTimeString("ja-JP")
     setMountTime(time)
-    console.log("Effect 2: Component mounted at", time)
+    console.log("Effect 2: Runs only once on mount at", time)
   }, [])
 
   // Effect 3: Runs when userId changes
   useEffect(() => {
     if (userId) {
       setLoading(true)
-      console.log("Effect 3: Fetching user", userId)
+      console.log(`Effect 3: Re-running because userId changed to ${userId}`)
 
       fetch(`https://jsonplaceholder.typicode.com/users/${userId}`)
         .then(res => res.json())
         .then(data => {
           setUserData(data)
           setLoading(false)
+          console.log(`Effect 3: Fetched data for user ${userId}`)
         })
         .catch(err => {
           console.error(err)
@@ -66,7 +70,7 @@ export default function UseEffectExample() {
     let interval: NodeJS.Timeout | null = null
 
     if (isTimerRunning) {
-      console.log("Effect 4: Starting timer")
+      console.log("Effect 4: Timer started - setInterval created")
       interval = setInterval(() => {
         setSeconds(prev => prev + 1)
       }, 1000)
@@ -75,7 +79,7 @@ export default function UseEffectExample() {
     // Cleanup function: runs before next effect and on unmount
     return () => {
       if (interval) {
-        console.log("Effect 4: Cleaning up timer")
+        console.log("Effect 4: Cleanup - clearInterval called")
         clearInterval(interval)
       }
     }
@@ -85,163 +89,168 @@ export default function UseEffectExample() {
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth)
+      console.log(`Effect 5: Window resized to ${window.innerWidth}px`)
     }
 
     // Set initial width
-    handleResize()
-
-    console.log("Effect 5: Adding resize listener")
+    setWindowWidth(window.innerWidth)
+    console.log("Effect 5: Event listener added on mount")
     window.addEventListener("resize", handleResize)
 
     // Cleanup: remove event listener
     return () => {
-      console.log("Effect 5: Removing resize listener")
+      console.log("Effect 5: Cleanup - Event listener removed")
       window.removeEventListener("resize", handleResize)
     }
   }, [])
 
   // Effect 6: Fetch posts on mount
   useEffect(() => {
-    console.log("Effect 6: Fetching posts")
+    console.log("Effect 6: Starting async data fetch")
     fetch("https://jsonplaceholder.typicode.com/posts?_limit=3")
       .then(res => res.json())
-      .then(data => setPosts(data))
+      .then(data => {
+        setPosts(data)
+        console.log("Effect 6: Posts fetched successfully")
+      })
   }, [])
 
   return (
-    <div className="min-h-screen p-8 pb-20 sm:p-20">
-      <Link href="/" className="text-blue-600 hover:underline mb-4 block">
-        ← ホームに戻る
-      </Link>
+    <div className="min-h-screen bg-background">
+      <Nav />
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <h1 className="text-4xl font-bold tracking-tight mb-12 text-center">useEffect <span className="text-primary">Examples</span></h1>
 
-      <h1 className="text-3xl font-bold mb-8">useEffect Examples</h1>
-
-      <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded">
-        <p className="font-semibold">💡 Open Browser Console</p>
-        <p className="text-sm">Press F12 to see console logs showing when each effect runs.</p>
-      </div>
-
-      {/* Example 1: Every Render */}
-      <section className="mb-8 p-6 border rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4">1. Run on Every Render</h2>
-        <p className="text-gray-600 mb-4">
-          No dependency array = runs after every render. Usually avoid this pattern!
-        </p>
-        <div className="space-y-4">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => setCount(count + 1)}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            >
-              Increment Count: {count}
-            </button>
-            <span className="text-sm text-gray-500">
-              This component has rendered {renderCount} times (capped at 5 to prevent crash)
-            </span>
-          </div>
+        <div className="mb-6 p-4 bg-muted border rounded-lg">
+          <p className="font-semibold">💡 Open Browser Console</p>
+          <p className="text-sm text-muted-foreground">Press F12 to see console logs showing when each effect runs.</p>
         </div>
-        <pre className="mt-4 p-4 bg-gray-100 rounded text-sm">
+
+        {/* Example 1: Every Render */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>1. Run on Every Render</CardTitle>
+            <CardDescription>
+              No dependency array = runs after every render. Usually avoid this pattern!
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex items-center gap-4">
+                <Button onClick={() => setCount(count + 1)}>
+                  Increment Count: {count}
+                </Button>
+                <span className="text-sm text-muted-foreground">
+                  This component has rendered {renderCount} times (capped at 5 to prevent crash)
+                </span>
+              </div>
+            </div>
+            <pre className="mt-4 p-4 bg-muted rounded-lg text-sm font-mono border overflow-x-auto">
 {`useEffect(() => {
   console.log("Runs on every render")
   // No dependency array!
 })`}
-        </pre>
-        <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded text-sm">
-          ⚠️ Warning: Without dependencies, this effect runs on EVERY render.
-          If you update state inside, it causes infinite loop! (capped at 5 for demo safety)
-        </div>
-      </section>
+            </pre>
+            <div className="mt-4 p-3 bg-destructive/10 border border-destructive/20 rounded-lg text-sm">
+              ⚠️ Warning: Without dependencies, this effect runs on EVERY render.
+              If you update state inside, it causes infinite loop! (capped at 5 for demo safety)
+            </div>
+          </CardContent>
+        </Card>
 
-      {/* Example 2: Mount Only */}
-      <section className="mb-8 p-6 border rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4">2. Run Once on Mount</h2>
-        <p className="text-gray-600 mb-4">
-          Empty dependency array [] = runs only once after initial render.
-        </p>
-        <div className="p-4 bg-green-50 rounded">
-          <p className="font-semibold">Component mounted at:</p>
-          <p className="text-2xl font-mono mt-2">{mountTime}</p>
-        </div>
-        <pre className="mt-4 p-4 bg-gray-100 rounded text-sm">
+        {/* Example 2: Mount Only */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>2. Run Once on Mount</CardTitle>
+            <CardDescription>
+              Empty dependency array [] = runs only once after initial render.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="p-4 bg-muted rounded-lg">
+              <p className="font-semibold">Component mounted at:</p>
+              <p className="text-2xl font-mono mt-2">{mountTime}</p>
+            </div>
+            <pre className="mt-4 p-4 bg-muted rounded-lg text-sm font-mono border overflow-x-auto">
 {`useEffect(() => {
   console.log("Runs only once on mount")
   // Initialize, fetch data, setup subscriptions
 }, [])  // Empty dependency array`}
-        </pre>
-        <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded text-sm">
-          💡 Common use: Initial data fetching, setting up subscriptions
-        </div>
-      </section>
-
-      {/* Example 3: Dependency Changes */}
-      <section className="mb-8 p-6 border rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4">3. Run When Dependency Changes</h2>
-        <p className="text-gray-600 mb-4">
-          Dependencies [dep] = runs when dep changes. Most common pattern!
-        </p>
-        <div className="space-y-4">
-          <div className="flex gap-2">
-            {[1, 2, 3, 4, 5].map(id => (
-              <button
-                key={id}
-                onClick={() => setUserId(id)}
-                className={`px-4 py-2 rounded ${
-                  userId === id
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-200 hover:bg-gray-300"
-                }`}
-              >
-                User {id}
-              </button>
-            ))}
-          </div>
-          {loading ? (
-            <div className="p-4 bg-gray-100 rounded">Loading...</div>
-          ) : userData ? (
-            <div className="p-4 bg-blue-50 border border-blue-200 rounded">
-              <h3 className="font-semibold text-lg">{userData.name}</h3>
-              <p className="text-sm text-gray-600">{userData.email}</p>
-              <p className="text-sm text-gray-600">{userData.phone}</p>
+            </pre>
+            <div className="mt-4 p-3 bg-muted border rounded-lg text-sm">
+              💡 Common use: Initial data fetching, setting up subscriptions
             </div>
-          ) : null}
-        </div>
-        <pre className="mt-4 p-4 bg-gray-100 rounded text-sm overflow-x-auto">
+          </CardContent>
+        </Card>
+
+        {/* Example 3: Dependency Changes */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>3. Run When Dependency Changes</CardTitle>
+            <CardDescription>
+              Dependencies [dep] = runs when dep changes. Most common pattern!
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex gap-2">
+                {[1, 2, 3, 4, 5].map(id => (
+                  <Button
+                    key={id}
+                    onClick={() => setUserId(id)}
+                    variant={userId === id ? "default" : "outline"}
+                  >
+                    User {id}
+                  </Button>
+                ))}
+              </div>
+              {loading ? (
+                <div className="p-4 bg-muted rounded-lg">Loading...</div>
+              ) : userData ? (
+                <div className="p-4 bg-muted border rounded-lg">
+                  <h3 className="font-semibold text-lg">{userData.name}</h3>
+                  <p className="text-sm text-muted-foreground">{userData.email}</p>
+                  <p className="text-sm text-muted-foreground">{userData.phone}</p>
+                </div>
+              ) : null}
+            </div>
+            <pre className="mt-4 p-4 bg-muted rounded-lg text-sm font-mono border overflow-x-auto">
 {`useEffect(() => {
   fetch(\`/api/users/\${userId}\`)
     .then(res => res.json())
     .then(data => setUserData(data))
 }, [userId])  // Re-run when userId changes`}
-        </pre>
-      </section>
+            </pre>
+          </CardContent>
+        </Card>
 
-      {/* Example 4: Cleanup Function */}
-      <section className="mb-8 p-6 border rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4">4. Cleanup Function (Timer)</h2>
-        <p className="text-gray-600 mb-4">
-          Return cleanup function to clear timers, cancel requests, remove listeners.
-        </p>
-        <div className="space-y-4">
-          <div className="flex items-center gap-4">
-            <span className="text-3xl font-mono">{seconds}s</span>
-            <button
-              onClick={() => setIsTimerRunning(!isTimerRunning)}
-              className={`px-4 py-2 rounded text-white ${
-                isTimerRunning
-                  ? "bg-red-500 hover:bg-red-600"
-                  : "bg-green-500 hover:bg-green-600"
-              }`}
-            >
-              {isTimerRunning ? "Stop" : "Start"} Timer
-            </button>
-            <button
-              onClick={() => setSeconds(0)}
-              className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
-            >
-              Reset
-            </button>
-          </div>
-        </div>
-        <pre className="mt-4 p-4 bg-gray-100 rounded text-sm overflow-x-auto">
+        {/* Example 4: Cleanup Function */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>4. Cleanup Function (Timer)</CardTitle>
+            <CardDescription>
+              Return cleanup function to clear timers, cancel requests, remove listeners.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="flex items-center gap-4">
+                <span className="text-3xl font-mono">{seconds}s</span>
+                <Button
+                  onClick={() => setIsTimerRunning(!isTimerRunning)}
+                  variant={isTimerRunning ? "destructive" : "default"}
+                >
+                  {isTimerRunning ? "Stop" : "Start"} Timer
+                </Button>
+                <Button
+                  onClick={() => setSeconds(0)}
+                  variant="secondary"
+                >
+                  Reset
+                </Button>
+              </div>
+            </div>
+            <pre className="mt-4 p-4 bg-muted rounded-lg text-sm font-mono border overflow-x-auto">
 {`useEffect(() => {
   const interval = setInterval(() => {
     setSeconds(prev => prev + 1)
@@ -252,24 +261,28 @@ export default function UseEffectExample() {
     clearInterval(interval)
   }
 }, [isTimerRunning])`}
-        </pre>
-        <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded text-sm">
-          💡 Cleanup prevents memory leaks. Always clean up timers, subscriptions, listeners!
-        </div>
-      </section>
+            </pre>
+            <div className="mt-4 p-3 bg-muted border rounded-lg text-sm">
+              💡 Cleanup prevents memory leaks. Always clean up timers, subscriptions, listeners!
+            </div>
+          </CardContent>
+        </Card>
 
-      {/* Example 5: Event Listener */}
-      <section className="mb-8 p-6 border rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4">5. Event Listener with Cleanup</h2>
-        <p className="text-gray-600 mb-4">
-          Setup event listener on mount, remove on unmount.
-        </p>
-        <div className="p-4 bg-purple-50 rounded">
-          <p className="text-sm text-gray-600">Current window width:</p>
-          <p className="text-2xl font-mono">{windowWidth}px</p>
-          <p className="text-sm text-gray-500 mt-2">Try resizing your browser window!</p>
-        </div>
-        <pre className="mt-4 p-4 bg-gray-100 rounded text-sm overflow-x-auto">
+        {/* Example 5: Event Listener */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>5. Event Listener with Cleanup</CardTitle>
+            <CardDescription>
+              Setup event listener on mount, remove on unmount.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="p-4 bg-muted rounded-lg">
+              <p className="text-sm text-muted-foreground">Current window width:</p>
+              <p className="text-2xl font-mono">{windowWidth}px</p>
+              <p className="text-sm text-muted-foreground mt-2">Try resizing your browser window!</p>
+            </div>
+            <pre className="mt-4 p-4 bg-muted rounded-lg text-sm font-mono border overflow-x-auto">
 {`useEffect(() => {
   const handleResize = () => setWindowWidth(window.innerWidth)
 
@@ -280,28 +293,32 @@ export default function UseEffectExample() {
     window.removeEventListener("resize", handleResize)
   }
 }, [])`}
-        </pre>
-      </section>
+            </pre>
+          </CardContent>
+        </Card>
 
-      {/* Example 6: Async Data Fetching */}
-      <section className="mb-8 p-6 border rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4">6. Async Data Fetching Pattern</h2>
-        <p className="text-gray-600 mb-4">
-          Fetch data on mount. Common pattern for client-side data loading.
-        </p>
-        <div className="space-y-2">
-          {posts.length === 0 ? (
-            <p className="text-gray-500">Loading posts...</p>
-          ) : (
-            posts.map(post => (
-              <div key={post.id} className="p-4 bg-gray-50 rounded">
-                <h3 className="font-semibold">{post.title}</h3>
-                <p className="text-sm text-gray-600 mt-1">{post.body.substring(0, 100)}...</p>
-              </div>
-            ))
-          )}
-        </div>
-        <pre className="mt-4 p-4 bg-gray-100 rounded text-sm overflow-x-auto">
+        {/* Example 6: Async Data Fetching */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>6. Async Data Fetching Pattern</CardTitle>
+            <CardDescription>
+              Fetch data on mount. Common pattern for client-side data loading.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              {posts.length === 0 ? (
+                <p className="text-muted-foreground">Loading posts...</p>
+              ) : (
+                posts.map(post => (
+                  <div key={post.id} className="p-4 bg-muted rounded-lg">
+                    <h3 className="font-semibold">{post.title}</h3>
+                    <p className="text-sm text-muted-foreground mt-1">{post.body.substring(0, 100)}...</p>
+                  </div>
+                ))
+              )}
+            </div>
+            <pre className="mt-4 p-4 bg-muted rounded-lg text-sm font-mono border overflow-x-auto">
 {`useEffect(() => {
   fetch("https://api.example.com/posts")
     .then(res => res.json())
@@ -317,44 +334,54 @@ useEffect(() => {
   }
   fetchData()
 }, [])`}
-        </pre>
-      </section>
+            </pre>
+          </CardContent>
+        </Card>
 
-      {/* Key Concepts */}
-      <section className="p-6 bg-blue-50 border border-blue-200 rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4">🎯 Key Concepts</h2>
-        <ul className="space-y-2 list-disc list-inside">
-          <li><strong>Timing</strong>: useEffect runs AFTER render (non-blocking)</li>
-          <li><strong>Dependencies</strong>: Only include values used inside the effect</li>
-          <li><strong>Cleanup</strong>: Return function to cleanup subscriptions/timers/listeners</li>
-          <li><strong>Infinite loops</strong>: Be careful with state updates inside effects</li>
-          <li><strong>Multiple effects</strong>: Split different concerns into separate useEffect calls</li>
-          <li><strong>Async</strong>: Can't make useEffect callback async directly, use inner async function</li>
-        </ul>
-      </section>
+        {/* Key Concepts */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle>🎯 Key Concepts</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul className="space-y-2 list-disc list-inside">
+              <li><strong>Timing</strong>: useEffect runs AFTER render (non-blocking)</li>
+              <li><strong>Dependencies</strong>: Only include values used inside the effect</li>
+              <li><strong>Cleanup</strong>: Return function to cleanup subscriptions/timers/listeners</li>
+              <li><strong>Infinite loops</strong>: Be careful with state updates inside effects</li>
+              <li><strong>Multiple effects</strong>: Split different concerns into separate useEffect calls</li>
+              <li><strong>Async</strong>: Can't make useEffect callback async directly, use inner async function</li>
+            </ul>
+          </CardContent>
+        </Card>
 
-      {/* Common Pitfalls */}
-      <section className="mt-6 p-6 bg-red-50 border border-red-200 rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4">⚠️ Common Pitfalls</h2>
-        <div className="space-y-3 text-sm">
-          <div>
-            <p className="font-semibold">❌ Missing dependencies:</p>
-            <pre className="mt-1 p-2 bg-white rounded">useEffect(() =&gt; doSomething(userId), [])  // userId is missing!</pre>
-          </div>
-          <div>
-            <p className="font-semibold">❌ Infinite loop:</p>
-            <pre className="mt-1 p-2 bg-white rounded">useEffect(() =&gt; setCount(count + 1), [count])  // Loops forever!</pre>
-          </div>
-          <div>
-            <p className="font-semibold">❌ Forgetting cleanup:</p>
-            <pre className="mt-1 p-2 bg-white rounded">useEffect(() =&gt; setInterval(fn, 1000), [])  // Memory leak!</pre>
-          </div>
-          <div>
-            <p className="font-semibold">❌ Async callback directly:</p>
-            <pre className="mt-1 p-2 bg-white rounded">useEffect(async () =&gt; await fetch(...), [])  // Wrong!</pre>
-          </div>
-        </div>
-      </section>
+        {/* Common Pitfalls */}
+        <Card>
+          <CardHeader>
+            <CardTitle>⚠️ Common Pitfalls</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3 text-sm">
+              <div>
+                <p className="font-semibold">❌ Missing dependencies:</p>
+                <pre className="mt-1 p-2 bg-muted rounded-lg font-mono">useEffect(() =&gt; doSomething(userId), [])  // userId is missing!</pre>
+              </div>
+              <div>
+                <p className="font-semibold">❌ Infinite loop:</p>
+                <pre className="mt-1 p-2 bg-muted rounded-lg font-mono">useEffect(() =&gt; setCount(count + 1), [count])  // Loops forever!</pre>
+              </div>
+              <div>
+                <p className="font-semibold">❌ Forgetting cleanup:</p>
+                <pre className="mt-1 p-2 bg-muted rounded-lg font-mono">useEffect(() =&gt; setInterval(fn, 1000), [])  // Memory leak!</pre>
+              </div>
+              <div>
+                <p className="font-semibold">❌ Async callback directly:</p>
+                <pre className="mt-1 p-2 bg-muted rounded-lg font-mono">useEffect(async () =&gt; await fetch(...), [])  // Wrong!</pre>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }

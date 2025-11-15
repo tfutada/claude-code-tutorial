@@ -1,6 +1,10 @@
 "use client"
 
-import Link from "next/link"
+import Nav from '@/components/nav'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Badge } from '@/components/ui/badge'
 import { ThemeProvider, useTheme } from "./theme-context"
 import { UserProvider, useUser } from "./user-context"
 
@@ -12,12 +16,9 @@ function ThemeToggle() {
     <div className="space-y-4">
       <div className="flex items-center gap-4">
         <span className="text-lg">Current theme: <strong>{theme}</strong></span>
-        <button
-          onClick={toggleTheme}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        >
+        <Button onClick={toggleTheme}>
           Toggle Theme
-        </button>
+        </Button>
       </div>
     </div>
   )
@@ -27,13 +28,13 @@ function ThemedBox() {
   const { theme } = useTheme()
 
   return (
-    <div className={`p-6 rounded-lg ${
+    <div className={`p-6 rounded-lg border-2 ${
       theme === "light"
-        ? "bg-white border-2 border-gray-300 text-black"
-        : "bg-gray-800 border-2 border-gray-600 text-white"
+        ? "bg-background border-border"
+        : "bg-muted border-border"
     }`}>
       <p className="font-semibold">This box changes based on theme!</p>
-      <p className="text-sm mt-2">Theme: {theme}</p>
+      <p className="text-sm text-muted-foreground mt-2">Theme: {theme}</p>
     </div>
   )
 }
@@ -42,11 +43,11 @@ function NestedThemedComponent() {
   const { theme } = useTheme()
 
   return (
-    <div className="p-4 bg-purple-100 dark:bg-purple-900 rounded">
+    <div className="p-4 bg-muted rounded-lg">
       <p className="text-sm">
         🎨 Even deeply nested components can access theme: <strong>{theme}</strong>
       </p>
-      <p className="text-xs mt-1 text-gray-600 dark:text-gray-400">
+      <p className="text-xs mt-1 text-muted-foreground">
         No prop drilling needed!
       </p>
     </div>
@@ -67,29 +68,23 @@ function UserProfile() {
 
   if (!user) {
     return (
-      <div className="p-6 bg-gray-100 rounded-lg">
+      <div className="p-6 bg-muted rounded-lg">
         <p className="mb-4">Not logged in</p>
-        <button
-          onClick={handleLogin}
-          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-        >
+        <Button onClick={handleLogin} variant="default">
           Login
-        </button>
+        </Button>
       </div>
     )
   }
 
   return (
-    <div className="p-6 bg-green-50 border-2 border-green-200 rounded-lg">
+    <div className="p-6 bg-muted border-2 rounded-lg">
       <h3 className="font-semibold text-lg mb-2">Welcome, {user.name}!</h3>
-      <p className="text-sm text-gray-600">Email: {user.email}</p>
-      <p className="text-sm text-gray-600">Role: {user.role}</p>
-      <button
-        onClick={logout}
-        className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-      >
+      <p className="text-sm text-muted-foreground">Email: {user.email}</p>
+      <p className="text-sm text-muted-foreground">Role: {user.role}</p>
+      <Button onClick={logout} variant="destructive" className="mt-4">
         Logout
-      </button>
+      </Button>
     </div>
   )
 }
@@ -98,26 +93,24 @@ function UserSettings() {
   const { user, updateUser } = useUser()
 
   if (!user) {
-    return <p className="text-gray-500 italic">Login to see settings</p>
+    return <p className="text-muted-foreground italic">Login to see settings</p>
   }
 
   return (
     <div className="space-y-3">
-      <input
+      <Input
         type="text"
         value={user.name}
         onChange={(e) => updateUser({ name: e.target.value })}
-        className="w-full px-4 py-2 border rounded"
         placeholder="Name"
       />
-      <input
+      <Input
         type="email"
         value={user.email}
         onChange={(e) => updateUser({ email: e.target.value })}
-        className="w-full px-4 py-2 border rounded"
         placeholder="Email"
       />
-      <p className="text-sm text-gray-600">
+      <p className="text-sm text-muted-foreground">
         Changes update immediately across all components!
       </p>
     </div>
@@ -130,13 +123,11 @@ function UserBadge() {
   if (!user) return null
 
   return (
-    <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-100 rounded-full text-sm">
+    <div className="inline-flex items-center gap-2 px-3 py-1 bg-muted rounded-full text-sm border">
       <span className="font-semibold">{user.name}</span>
-      <span className={`px-2 py-0.5 rounded text-xs ${
-        user.role === "admin" ? "bg-red-500 text-white" : "bg-gray-300"
-      }`}>
+      <Badge variant={user.role === "admin" ? "destructive" : "secondary"}>
         {user.role}
-      </span>
+      </Badge>
     </div>
   )
 }
@@ -144,33 +135,34 @@ function UserBadge() {
 // Main component wrapped in providers
 function UseContextContent() {
   return (
-    <div className="min-h-screen p-8 pb-20 sm:p-20">
-      <Link href="/" className="text-blue-600 hover:underline mb-4 block">
-        ← ホームに戻る
-      </Link>
+    <div className="min-h-screen bg-background">
+      <Nav />
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <h1 className="text-4xl font-bold tracking-tight mb-12 text-center">useContext <span className="text-primary">Examples</span></h1>
 
-      <h1 className="text-3xl font-bold mb-8">useContext Examples</h1>
-
-      <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded">
-        <p className="font-semibold">💡 What is Context?</p>
-        <p className="text-sm mt-1">
-          Context provides a way to pass data through the component tree without
-          having to pass props down manually at every level (prop drilling).
-        </p>
-      </div>
+        <div className="mb-6 p-4 bg-muted border rounded-lg">
+          <p className="font-semibold">💡 What is Context?</p>
+          <p className="text-sm text-muted-foreground mt-1">
+            Context provides a way to pass data through the component tree without
+            having to pass props down manually at every level (prop drilling).
+          </p>
+        </div>
 
       {/* Example 1: Theme Context */}
-      <section className="mb-8 p-6 border rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4">1. Theme Context (Simple)</h2>
-        <p className="text-gray-600 mb-4">
-          Share theme across components without prop drilling.
-        </p>
-        <div className="space-y-4">
-          <ThemeToggle />
-          <ThemedBox />
-          <NestedThemedComponent />
-        </div>
-        <pre className="mt-4 p-4 bg-gray-100 rounded text-sm overflow-x-auto">
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle>1. Theme Context (Simple)</CardTitle>
+          <CardDescription>
+            Share theme across components without prop drilling.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <ThemeToggle />
+            <ThemedBox />
+            <NestedThemedComponent />
+          </div>
+          <pre className="mt-4 p-4 bg-muted rounded-lg text-sm font-mono border overflow-x-auto">
 {`// 1. Create context
 const ThemeContext = createContext()
 
@@ -181,30 +173,34 @@ const ThemeContext = createContext()
 
 // 3. Use in any child component
 const { theme, toggleTheme } = useTheme()`}
-        </pre>
-      </section>
+          </pre>
+        </CardContent>
+      </Card>
 
       {/* Example 2: User Context */}
-      <section className="mb-8 p-6 border rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4">2. User Context (Complex State)</h2>
-        <p className="text-gray-600 mb-4">
-          Manage user authentication state globally. All components see updates instantly.
-        </p>
-        <div className="grid md:grid-cols-2 gap-6">
-          <div>
-            <h3 className="font-semibold mb-3">Profile Component:</h3>
-            <UserProfile />
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle>2. User Context (Complex State)</CardTitle>
+          <CardDescription>
+            Manage user authentication state globally. All components see updates instantly.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid md:grid-cols-2 gap-6">
+            <div>
+              <h3 className="font-semibold mb-3">Profile Component:</h3>
+              <UserProfile />
+            </div>
+            <div>
+              <h3 className="font-semibold mb-3">Settings Component:</h3>
+              <UserSettings />
+            </div>
           </div>
-          <div>
-            <h3 className="font-semibold mb-3">Settings Component:</h3>
-            <UserSettings />
+          <div className="mt-4 p-4 bg-muted rounded-lg">
+            <p className="text-sm font-semibold mb-2">User Badge (from nested component):</p>
+            <UserBadge />
           </div>
-        </div>
-        <div className="mt-4 p-4 bg-blue-50 rounded">
-          <p className="text-sm font-semibold mb-2">User Badge (from nested component):</p>
-          <UserBadge />
-        </div>
-        <pre className="mt-4 p-4 bg-gray-100 rounded text-sm overflow-x-auto">
+          <pre className="mt-4 p-4 bg-muted rounded-lg text-sm font-mono border overflow-x-auto">
 {`// Define context type
 interface UserContextType {
   user: User | null
@@ -223,16 +219,20 @@ export function UserProvider({ children }) {
     </UserContext.Provider>
   )
 }`}
-        </pre>
-      </section>
+          </pre>
+        </CardContent>
+      </Card>
 
       {/* Context Creation Pattern */}
-      <section className="mb-8 p-6 border rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4">3. Context Creation Pattern</h2>
-        <p className="text-gray-600 mb-4">
-          Standard 4-step pattern for creating context with TypeScript.
-        </p>
-        <pre className="p-4 bg-gray-100 rounded text-sm overflow-x-auto">
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle>3. Context Creation Pattern</CardTitle>
+          <CardDescription>
+            Standard 4-step pattern for creating context with TypeScript.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <pre className="p-4 bg-muted rounded-lg text-sm font-mono border overflow-x-auto">
 {`// Step 1: Define context type
 interface MyContextType {
   value: string
@@ -260,16 +260,20 @@ export function useMyContext() {
   }
   return context
 }`}
-        </pre>
-      </section>
+          </pre>
+        </CardContent>
+      </Card>
 
       {/* Multiple Contexts */}
-      <section className="mb-8 p-6 border rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4">4. Multiple Contexts (Composition)</h2>
-        <p className="text-gray-600 mb-4">
-          You can nest multiple providers. This page uses both ThemeProvider and UserProvider!
-        </p>
-        <pre className="p-4 bg-gray-100 rounded text-sm overflow-x-auto">
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle>4. Multiple Contexts (Composition)</CardTitle>
+          <CardDescription>
+            You can nest multiple providers. This page uses both ThemeProvider and UserProvider!
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <pre className="p-4 bg-muted rounded-lg text-sm font-mono border overflow-x-auto">
 {`// Nest providers
 <ThemeProvider>
   <UserProvider>
@@ -291,45 +295,59 @@ function AppProviders({ children }) {
     </ThemeProvider>
   )
 }`}
-        </pre>
-      </section>
+          </pre>
+        </CardContent>
+      </Card>
 
       {/* When to Use Context */}
-      <section className="mb-8 p-6 bg-green-50 border border-green-200 rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4">✅ When to Use Context</h2>
-        <ul className="space-y-2 list-disc list-inside">
-          <li>Theme (dark/light mode)</li>
-          <li>User authentication and profile</li>
-          <li>Language/locale settings (i18n)</li>
-          <li>Shopping cart in e-commerce</li>
-          <li>Global UI state (modal, toast, sidebar)</li>
-          <li>Data that many components need to access</li>
-        </ul>
-      </section>
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle>✅ When to Use Context</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ul className="space-y-2 list-disc list-inside">
+            <li>Theme (dark/light mode)</li>
+            <li>User authentication and profile</li>
+            <li>Language/locale settings (i18n)</li>
+            <li>Shopping cart in e-commerce</li>
+            <li>Global UI state (modal, toast, sidebar)</li>
+            <li>Data that many components need to access</li>
+          </ul>
+        </CardContent>
+      </Card>
 
       {/* When NOT to Use Context */}
-      <section className="mb-8 p-6 bg-red-50 border border-red-200 rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4">⚠️ When NOT to Use Context</h2>
-        <ul className="space-y-2 list-disc list-inside text-sm">
-          <li><strong>Frequently changing data</strong>: Context re-renders all consumers. Use state management lib instead (Redux, Zustand)</li>
-          <li><strong>Passing props 1-2 levels down</strong>: Just use props! Context is for deeply nested components</li>
-          <li><strong>Performance-critical data</strong>: Context doesn't optimize re-renders automatically</li>
-          <li><strong>Everything</strong>: Don't make everything global. Keep state as local as possible</li>
-        </ul>
-      </section>
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle>⚠️ When NOT to Use Context</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ul className="space-y-2 list-disc list-inside text-sm">
+            <li><strong>Frequently changing data</strong>: Context re-renders all consumers. Use state management lib instead (Redux, Zustand)</li>
+            <li><strong>Passing props 1-2 levels down</strong>: Just use props! Context is for deeply nested components</li>
+            <li><strong>Performance-critical data</strong>: Context doesn't optimize re-renders automatically</li>
+            <li><strong>Everything</strong>: Don't make everything global. Keep state as local as possible</li>
+          </ul>
+        </CardContent>
+      </Card>
 
       {/* Key Concepts */}
-      <section className="p-6 bg-blue-50 border border-blue-200 rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4">🎯 Key Concepts</h2>
-        <ul className="space-y-2 list-disc list-inside">
-          <li><strong>Provider</strong>: Wraps components that need access to context</li>
-          <li><strong>Consumer</strong>: Any component that calls useContext()</li>
-          <li><strong>Re-renders</strong>: All consumers re-render when context value changes</li>
-          <li><strong>Default value</strong>: Used only when no Provider is found above in tree</li>
-          <li><strong>Custom hook</strong>: Wrap useContext in custom hook for better error messages</li>
-          <li><strong>Composition</strong>: Multiple contexts can be nested/composed</li>
-        </ul>
-      </section>
+      <Card>
+        <CardHeader>
+          <CardTitle>🎯 Key Concepts</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <ul className="space-y-2 list-disc list-inside">
+            <li><strong>Provider</strong>: Wraps components that need access to context</li>
+            <li><strong>Consumer</strong>: Any component that calls useContext()</li>
+            <li><strong>Re-renders</strong>: All consumers re-render when context value changes</li>
+            <li><strong>Default value</strong>: Used only when no Provider is found above in tree</li>
+            <li><strong>Custom hook</strong>: Wrap useContext in custom hook for better error messages</li>
+            <li><strong>Composition</strong>: Multiple contexts can be nested/composed</li>
+          </ul>
+        </CardContent>
+      </Card>
+      </div>
     </div>
   )
 }

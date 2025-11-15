@@ -1,7 +1,11 @@
 "use client"
 
 import { useState, useRef, useMemo, useCallback, useReducer, useEffect } from "react"
-import Link from "next/link"
+import Nav from '@/components/nav'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Badge } from '@/components/ui/badge'
 
 export default function AdvancedHooksExample() {
   // =========================
@@ -101,139 +105,127 @@ export default function AdvancedHooksExample() {
   })
 
   return (
-    <div className="min-h-screen p-8 pb-20 sm:p-20">
-      <Link href="/" className="text-blue-600 hover:underline mb-4 block">
-        ← ホームに戻る
-      </Link>
+    <div className="min-h-screen bg-background">
+      <Nav />
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <h1 className="text-4xl font-bold tracking-tight mb-12 text-center">Advanced <span className="text-primary">Hooks</span></h1>
 
-      <h1 className="text-3xl font-bold mb-8">Advanced Hooks</h1>
-
-      <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 rounded">
-        <p className="font-semibold">💡 Open Browser Console</p>
-        <p className="text-sm">Press F12 to see memoization logs and understand when computations run.</p>
-      </div>
+        <div className="mb-6 p-4 bg-muted border rounded-lg">
+          <p className="font-semibold">💡 Open Browser Console</p>
+          <p className="text-sm text-muted-foreground">Press F12 to see memoization logs and understand when computations run.</p>
+        </div>
 
       {/* useRef Section */}
-      <section className="mb-8 p-6 border rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4">useRef - Mutable Values & DOM Access</h2>
-        <p className="text-gray-600 mb-4">
-          useRef stores mutable values that persist across renders WITHOUT triggering re-render.
-        </p>
-
-        <div className="space-y-6">
-          {/* Example 1: DOM Access */}
-          <div className="p-4 bg-blue-50 rounded">
-            <h3 className="font-semibold mb-3">1. DOM Element Access</h3>
-            <div className="flex gap-2 mb-2">
-              <input
-                ref={inputRef}
-                type="text"
-                placeholder="Focus me with button"
-                className="flex-1 px-4 py-2 border rounded"
-              />
-              <button
-                onClick={() => inputRef.current?.focus()}
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-              >
-                Focus Input
-              </button>
-            </div>
-            <pre className="mt-3 p-3 bg-white rounded text-xs overflow-x-auto">
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle>useRef - Mutable Values & DOM Access</CardTitle>
+          <CardDescription>
+            useRef stores mutable values that persist across renders WITHOUT triggering re-render.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-6">
+            {/* Example 1: DOM Access */}
+            <div className="p-4 bg-muted rounded-lg">
+              <h3 className="font-semibold mb-3">1. DOM Element Access</h3>
+              <div className="flex gap-2 mb-2">
+                <Input
+                  ref={inputRef}
+                  type="text"
+                  placeholder="Focus me with button"
+                  className="flex-1"
+                />
+                <Button onClick={() => inputRef.current?.focus()}>
+                  Focus Input
+                </Button>
+              </div>
+              <pre className="mt-3 p-3 bg-background rounded-lg text-xs font-mono border overflow-x-auto">
 {`const inputRef = useRef<HTMLInputElement>(null)
 <input ref={inputRef} />
 inputRef.current?.focus()`}
-            </pre>
-          </div>
-
-          {/* Example 2: Track Renders */}
-          <div className="p-4 bg-green-50 rounded">
-            <h3 className="font-semibold mb-3">2. Track Renders (No Re-render)</h3>
-            <div className="flex items-center gap-4 mb-2">
-              <button
-                onClick={() => setRefCount(refCount + 1)}
-                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-              >
-                Trigger Re-render
-              </button>
-              <span>State count: {refCount}</span>
-              <span className="text-purple-600 font-semibold">
-                Render count: {renderCountRef.current}
-              </span>
+              </pre>
             </div>
-            <p className="text-sm text-gray-600">
-              Ref updates don't cause re-renders! Render count increases but doesn't trigger new render.
-            </p>
-            <pre className="mt-3 p-3 bg-white rounded text-xs">
+
+            {/* Example 2: Track Renders */}
+            <div className="p-4 bg-muted rounded-lg">
+              <h3 className="font-semibold mb-3">2. Track Renders (No Re-render)</h3>
+              <div className="flex items-center gap-4 mb-2">
+                <Button onClick={() => setRefCount(refCount + 1)}>
+                  Trigger Re-render
+                </Button>
+                <span>State count: {refCount}</span>
+                <span className="text-primary font-semibold">
+                  Render count: {renderCountRef.current}
+                </span>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Ref updates don't cause re-renders! Render count increases but doesn't trigger new render.
+              </p>
+              <pre className="mt-3 p-3 bg-background rounded-lg text-xs font-mono border">
 {`const renderCountRef = useRef(0)
 renderCountRef.current++  // No re-render!`}
-            </pre>
-          </div>
-
-          {/* Example 3: Previous Value */}
-          <div className="p-4 bg-purple-50 rounded">
-            <h3 className="font-semibold mb-3">3. Store Previous Value</h3>
-            <div className="space-y-2">
-              <p>Current: <strong>{refCount}</strong></p>
-              <p>Previous: <strong>{previousCountRef.current}</strong></p>
+              </pre>
             </div>
-            <pre className="mt-3 p-3 bg-white rounded text-xs overflow-x-auto">
+
+            {/* Example 3: Previous Value */}
+            <div className="p-4 bg-muted rounded-lg">
+              <h3 className="font-semibold mb-3">3. Store Previous Value</h3>
+              <div className="space-y-2">
+                <p>Current: <strong>{refCount}</strong></p>
+                <p>Previous: <strong>{previousCountRef.current}</strong></p>
+              </div>
+              <pre className="mt-3 p-3 bg-background rounded-lg text-xs font-mono border overflow-x-auto">
 {`const previousRef = useRef(0)
 useEffect(() => {
   previousRef.current = count  // Store after render
 }, [count])`}
-            </pre>
+              </pre>
+            </div>
           </div>
-        </div>
-      </section>
+        </CardContent>
+      </Card>
 
       {/* useMemo Section */}
-      <section className="mb-8 p-6 border rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4">useMemo - Memoize Expensive Calculations</h2>
-        <p className="text-gray-600 mb-4">
-          Avoid recalculating expensive computations on every render. Only recomputes when dependencies change.
-        </p>
-
-        <div className="space-y-4">
-          <div className="flex gap-2">
-            <button
-              onClick={() => setNumbers([...numbers, numbers.length + 1])}
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-            >
-              Add Number
-            </button>
-            <button
-              onClick={() => setMultiplier(multiplier + 1)}
-              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-            >
-              Increase Multiplier
-            </button>
-            <button
-              onClick={() => setMemoRenderCount(memoRenderCount + 1)}
-              className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
-            >
-              Force Re-render (No Recalc)
-            </button>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-4">
-            <div className="p-4 bg-blue-50 rounded">
-              <p className="text-sm text-gray-600">Numbers:</p>
-              <p className="font-mono">[{numbers.join(", ")}]</p>
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle>useMemo - Memoize Expensive Calculations</CardTitle>
+          <CardDescription>
+            Avoid recalculating expensive computations on every render. Only recomputes when dependencies change.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="flex gap-2">
+              <Button onClick={() => setNumbers([...numbers, numbers.length + 1])}>
+                Add Number
+              </Button>
+              <Button onClick={() => setMultiplier(multiplier + 1)} variant="secondary">
+                Increase Multiplier
+              </Button>
+              <Button onClick={() => setMemoRenderCount(memoRenderCount + 1)} variant="outline">
+                Force Re-render (No Recalc)
+              </Button>
             </div>
-            <div className="p-4 bg-green-50 rounded">
-              <p className="text-sm text-gray-600">Results:</p>
-              <p>Sum: <strong>{sum}</strong></p>
-              <p>Multiplier: <strong>{multiplier}</strong></p>
-              <p>Sum × Multiplier: <strong>{multipliedSum}</strong></p>
+
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="p-4 bg-muted rounded-lg">
+                <p className="text-sm text-muted-foreground">Numbers:</p>
+                <p className="font-mono">[{numbers.join(", ")}]</p>
+              </div>
+              <div className="p-4 bg-muted rounded-lg">
+                <p className="text-sm text-muted-foreground">Results:</p>
+                <p>Sum: <strong>{sum}</strong></p>
+                <p>Multiplier: <strong>{multiplier}</strong></p>
+                <p>Sum × Multiplier: <strong>{multipliedSum}</strong></p>
+              </div>
             </div>
-          </div>
 
-          <div className="p-3 bg-yellow-50 border border-yellow-200 rounded text-sm">
-            <p className="font-semibold">💡 Check console!</p>
-            <p>Click "Force Re-render" - no recalculation happens because deps didn't change.</p>
-          </div>
+            <div className="p-3 bg-muted border rounded-lg text-sm">
+              <p className="font-semibold">💡 Check console!</p>
+              <p className="text-muted-foreground">Click "Force Re-render" - no recalculation happens because deps didn't change.</p>
+            </div>
 
-          <pre className="p-4 bg-gray-100 rounded text-sm overflow-x-auto">
+            <pre className="p-4 bg-muted rounded-lg text-sm font-mono border overflow-x-auto">
 {`// Only recalculates when 'numbers' changes
 const sum = useMemo(() => {
   return numbers.reduce((acc, n) => acc + n, 0)
@@ -243,52 +235,49 @@ const sum = useMemo(() => {
 const multipliedSum = useMemo(() => {
   return sum * multiplier
 }, [sum, multiplier])`}
-          </pre>
-        </div>
-      </section>
+            </pre>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* useCallback Section */}
-      <section className="mb-8 p-6 border rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4">useCallback - Memoize Functions</h2>
-        <p className="text-gray-600 mb-4">
-          Return same function reference across renders. Useful for passing callbacks to memoized child components.
-        </p>
-
-        <div className="space-y-4">
-          <div className="p-4 bg-blue-50 rounded">
-            <p className="mb-3">Callback called <strong>{callbackCount}</strong> times</p>
-            <div className="flex gap-2">
-              <button
-                onClick={handleClickMemoized}
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-              >
-                Call Memoized Function
-              </button>
-              <button
-                onClick={addItem}
-                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-              >
-                Add Item
-              </button>
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle>useCallback - Memoize Functions</CardTitle>
+          <CardDescription>
+            Return same function reference across renders. Useful for passing callbacks to memoized child components.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="p-4 bg-muted rounded-lg">
+              <p className="mb-3">Callback called <strong>{callbackCount}</strong> times</p>
+              <div className="flex gap-2">
+                <Button onClick={handleClickMemoized}>
+                  Call Memoized Function
+                </Button>
+                <Button onClick={addItem} variant="secondary">
+                  Add Item
+                </Button>
+              </div>
+              <div className="mt-3 space-y-1">
+                {items.map((item, i) => (
+                  <div key={i} className="p-2 bg-background rounded-lg text-sm border">{item}</div>
+                ))}
+              </div>
             </div>
-            <div className="mt-3 space-y-1">
-              {items.map((item, i) => (
-                <div key={i} className="p-2 bg-white rounded text-sm">{item}</div>
-              ))}
+
+            <div className="p-3 bg-muted border rounded-lg text-sm">
+              <p className="font-semibold">💡 When to use useCallback?</p>
+              <ul className="list-disc list-inside mt-1 space-y-1 text-muted-foreground">
+                <li>Passing callbacks to React.memo() components</li>
+                <li>Callbacks in useEffect dependencies</li>
+                <li>Context values with functions</li>
+                <li>Don't overuse - has slight overhead</li>
+              </ul>
             </div>
-          </div>
 
-          <div className="p-3 bg-yellow-50 border border-yellow-200 rounded text-sm">
-            <p className="font-semibold">💡 When to use useCallback?</p>
-            <ul className="list-disc list-inside mt-1 space-y-1">
-              <li>Passing callbacks to React.memo() components</li>
-              <li>Callbacks in useEffect dependencies</li>
-              <li>Context values with functions</li>
-              <li>Don't overuse - has slight overhead</li>
-            </ul>
-          </div>
-
-          <pre className="p-4 bg-gray-100 rounded text-sm overflow-x-auto">
+            <pre className="p-4 bg-muted rounded-lg text-sm font-mono border overflow-x-auto">
 {`// Without useCallback - new function every render
 const handleClick = () => console.log("clicked")
 
@@ -301,53 +290,53 @@ const handleClick = useCallback(() => {
 const handleAdd = useCallback(() => {
   doSomething(value)
 }, [value])  // Recreate when 'value' changes`}
-          </pre>
-        </div>
-      </section>
+            </pre>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* useReducer Section */}
-      <section className="mb-8 p-6 border rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4">useReducer - Complex State Logic</h2>
-        <p className="text-gray-600 mb-4">
-          Alternative to useState for complex state logic. Inspired by Redux pattern.
-        </p>
-
-        <div className="space-y-4">
-          <div className="p-4 bg-purple-50 rounded">
-            <div className="flex items-center gap-4 mb-4">
-              <button
-                onClick={() => dispatch({ type: "decrement" })}
-                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
-              >
-                -1
-              </button>
-              <span className="text-3xl font-mono font-bold">{reducerState.count}</span>
-              <button
-                onClick={() => dispatch({ type: "increment" })}
-                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-              >
-                +1
-              </button>
-              <button
-                onClick={() => dispatch({ type: "reset" })}
-                className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
-              >
-                Reset
-              </button>
-              <button
-                onClick={() => dispatch({ type: "set", payload: 100 })}
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-              >
-                Set to 100
-              </button>
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle>useReducer - Complex State Logic</CardTitle>
+          <CardDescription>
+            Alternative to useState for complex state logic. Inspired by Redux pattern.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div className="p-4 bg-muted rounded-lg">
+              <div className="flex items-center gap-4 mb-4">
+                <Button
+                  onClick={() => dispatch({ type: "decrement" })}
+                  variant="destructive"
+                >
+                  -1
+                </Button>
+                <span className="text-3xl font-mono font-bold">{reducerState.count}</span>
+                <Button onClick={() => dispatch({ type: "increment" })}>
+                  +1
+                </Button>
+                <Button
+                  onClick={() => dispatch({ type: "reset" })}
+                  variant="secondary"
+                >
+                  Reset
+                </Button>
+                <Button
+                  onClick={() => dispatch({ type: "set", payload: 100 })}
+                  variant="outline"
+                >
+                  Set to 100
+                </Button>
+              </div>
+              <div className="p-3 bg-background rounded-lg border">
+                <p className="text-sm font-semibold mb-1">History:</p>
+                <p className="font-mono text-sm">[{reducerState.history.join(", ")}]</p>
+              </div>
             </div>
-            <div className="p-3 bg-white rounded">
-              <p className="text-sm font-semibold mb-1">History:</p>
-              <p className="font-mono text-sm">[{reducerState.history.join(", ")}]</p>
-            </div>
-          </div>
 
-          <pre className="p-4 bg-gray-100 rounded text-sm overflow-x-auto">
+            <pre className="p-4 bg-muted rounded-lg text-sm font-mono border overflow-x-auto">
 {`type State = { count: number; history: number[] }
 type Action =
   | { type: "increment" }
@@ -372,62 +361,68 @@ const [state, dispatch] = useReducer(reducer, { count: 0, history: [0] })
 // Dispatch actions
 dispatch({ type: "increment" })
 dispatch({ type: "set", payload: 100 })`}
-          </pre>
+            </pre>
 
-          <div className="p-3 bg-blue-50 border border-blue-200 rounded text-sm">
-            <p className="font-semibold">✅ Use useReducer when:</p>
-            <ul className="list-disc list-inside mt-1 space-y-1">
-              <li>Complex state logic with multiple sub-values</li>
-              <li>Next state depends on previous state</li>
-              <li>Multiple ways to update the same state</li>
-              <li>Want to keep update logic separate from component</li>
-            </ul>
+            <div className="p-3 bg-muted border rounded-lg text-sm">
+              <p className="font-semibold">✅ Use useReducer when:</p>
+              <ul className="list-disc list-inside mt-1 space-y-1 text-muted-foreground">
+                <li>Complex state logic with multiple sub-values</li>
+                <li>Next state depends on previous state</li>
+                <li>Multiple ways to update the same state</li>
+                <li>Want to keep update logic separate from component</li>
+              </ul>
+            </div>
           </div>
-        </div>
-      </section>
+        </CardContent>
+      </Card>
 
       {/* Comparison Table */}
-      <section className="p-6 bg-gray-50 border rounded-lg">
-        <h2 className="text-2xl font-semibold mb-4">📊 Hook Comparison</h2>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b-2">
-                <th className="text-left p-2">Hook</th>
-                <th className="text-left p-2">Purpose</th>
-                <th className="text-left p-2">Triggers Re-render?</th>
-                <th className="text-left p-2">Use Case</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="border-b">
-                <td className="p-2 font-mono">useRef</td>
-                <td className="p-2">Store mutable value</td>
-                <td className="p-2">❌ No</td>
-                <td className="p-2">DOM access, store previous value</td>
-              </tr>
-              <tr className="border-b">
-                <td className="p-2 font-mono">useMemo</td>
-                <td className="p-2">Memoize calculation</td>
-                <td className="p-2">Only if result changes</td>
-                <td className="p-2">Expensive computations</td>
-              </tr>
-              <tr className="border-b">
-                <td className="p-2 font-mono">useCallback</td>
-                <td className="p-2">Memoize function</td>
-                <td className="p-2">Only if recreated</td>
-                <td className="p-2">Pass to memo'd components</td>
-              </tr>
-              <tr>
-                <td className="p-2 font-mono">useReducer</td>
-                <td className="p-2">Complex state logic</td>
-                <td className="p-2">✅ Yes</td>
-                <td className="p-2">Complex state updates</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
+      <Card>
+        <CardHeader>
+          <CardTitle>📊 Hook Comparison</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b-2">
+                  <th className="text-left p-2">Hook</th>
+                  <th className="text-left p-2">Purpose</th>
+                  <th className="text-left p-2">Triggers Re-render?</th>
+                  <th className="text-left p-2">Use Case</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b">
+                  <td className="p-2 font-mono">useRef</td>
+                  <td className="p-2">Store mutable value</td>
+                  <td className="p-2">❌ No</td>
+                  <td className="p-2">DOM access, store previous value</td>
+                </tr>
+                <tr className="border-b">
+                  <td className="p-2 font-mono">useMemo</td>
+                  <td className="p-2">Memoize calculation</td>
+                  <td className="p-2">Only if result changes</td>
+                  <td className="p-2">Expensive computations</td>
+                </tr>
+                <tr className="border-b">
+                  <td className="p-2 font-mono">useCallback</td>
+                  <td className="p-2">Memoize function</td>
+                  <td className="p-2">Only if recreated</td>
+                  <td className="p-2">Pass to memo'd components</td>
+                </tr>
+                <tr>
+                  <td className="p-2 font-mono">useReducer</td>
+                  <td className="p-2">Complex state logic</td>
+                  <td className="p-2">✅ Yes</td>
+                  <td className="p-2">Complex state updates</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </CardContent>
+      </Card>
+      </div>
     </div>
   )
 }
