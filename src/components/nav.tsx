@@ -1,26 +1,26 @@
+import { ThemeToggle } from "./theme-toggle";
+
 export default function Nav() {
   return (
-    <nav className="sticky top-0 z-50 border-b border-zinc-200 bg-white dark:border-zinc-800 dark:bg-black">
+    <nav className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <div className="text-xl font-bold text-zinc-900 dark:text-zinc-50">
-          Logo
+        <div className="text-xl font-bold text-foreground">
+          React Hooks
         </div>
-        <div className="flex gap-6">
-          <a href="/" className="text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50">
+        <div className="flex items-center gap-6">
+          <a href="/" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
             Home
           </a>
-          <a href="/about" className="text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50">
+          <a href="/about" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
             About
           </a>
-          <a href="/blog" className="text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50">
+          <a href="/blog" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
             Blog
           </a>
-          <a href="/async-examples" className="text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50">
+          <a href="/async-examples" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
             Async Examples
           </a>
-          <a href="#" className="text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-50">
-            Contact
-          </a>
+          <ThemeToggle />
         </div>
       </div>
     </nav>

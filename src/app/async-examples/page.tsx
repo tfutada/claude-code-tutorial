@@ -1,6 +1,12 @@
 'use client';
 
 import { useState, useRef } from 'react';
+import Nav from '@/components/nav';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
 
 export default function AsyncExamples() {
   // I/O-bound example state
@@ -173,206 +179,288 @@ export default function AsyncExamples() {
   };
 
   return (
-    <div className="min-h-screen p-8">
-      <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold mb-8">Async/Await Examples</h1>
+    <div className="min-h-screen bg-background">
+      <Nav />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        {/* Header */}
+        <div className="mb-12 text-center">
+          <h1 className="text-4xl font-bold tracking-tight mb-4">
+            Async/Await <span className="text-primary">Examples</span>
+          </h1>
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Learn the difference between I/O-bound and CPU-bound operations, and when to use async/await effectively
+          </p>
+        </div>
 
         {/* Two-column layout: Counter (sticky) + Examples */}
-        <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-8">
           {/* Left column: Sticky counter */}
-          <div className="lg:sticky lg:top-8 h-fit">
-            <div className="p-6 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-800">
-              <h2 className="text-xl font-semibold mb-2">UI Responsiveness Test</h2>
-              <p className="text-sm mb-4">Watch this counter to detect UI blocking</p>
-              <div className="flex flex-col items-center gap-4">
-                <div className="text-5xl font-mono font-bold text-blue-600 dark:text-blue-400">{counter}</div>
-                <div className="flex flex-col w-full gap-2">
-                  <button
-                    onClick={startCounter}
-                    className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-                  >
-                    Start
-                  </button>
-                  <button
-                    onClick={stopCounter}
-                    className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-                  >
-                    Stop
-                  </button>
-                  <button
-                    onClick={resetCounter}
-                    className="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700"
-                  >
-                    Reset
-                  </button>
+          <div className="lg:sticky lg:top-24 h-fit">
+            <Card className="border-primary/20">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <span className="text-2xl">⏱️</span>
+                  UI Responsiveness Test
+                </CardTitle>
+                <CardDescription>
+                  Watch this counter to detect UI blocking
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="flex flex-col items-center gap-4">
+                  <div className="text-6xl font-mono font-bold text-primary tabular-nums">{counter}</div>
+                  <div className="flex flex-col w-full gap-2">
+                    <Button onClick={startCounter} variant="default" className="w-full">
+                      Start Counter
+                    </Button>
+                    <Button onClick={stopCounter} variant="destructive" className="w-full">
+                      Stop Counter
+                    </Button>
+                    <Button onClick={resetCounter} variant="outline" className="w-full">
+                      Reset
+                    </Button>
+                  </div>
                 </div>
-              </div>
-              <div className="mt-4 pt-4 border-t border-blue-200 dark:border-blue-700">
-                <p className="text-xs text-gray-600 dark:text-gray-400">
-                  💡 Start the counter, then click examples. If the counter freezes, the UI is blocked!
-                </p>
-              </div>
-            </div>
+                <div className="pt-4 border-t space-y-2">
+                  <p className="text-sm text-muted-foreground">
+                    💡 <strong>How to test:</strong>
+                  </p>
+                  <ol className="text-xs text-muted-foreground space-y-1 list-decimal list-inside">
+                    <li>Start the counter</li>
+                    <li>Run an example</li>
+                    <li>Watch if counter freezes</li>
+                  </ol>
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
           {/* Right column: Examples */}
-          <div className="space-y-8">
+          <div className="space-y-6">
             {/* ✅ I/O-bound example */}
-            <section className="p-6 border border-green-500 rounded-lg bg-green-50 dark:bg-green-950">
-              <h2 className="text-2xl font-semibold mb-4 text-green-800 dark:text-green-200">
-                ✅ Correct: I/O-Bound Async
-              </h2>
-              <p className="mb-4">Network requests are perfect for async/await</p>
-              <button
-                onClick={handleIoExample}
-                disabled={ioLoading}
-                className="px-6 py-3 bg-green-600 text-white rounded hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-              >
-                {ioLoading ? 'Loading...' : 'Fetch Data (I/O)'}
-              </button>
-              {ioResult && (
-                <pre className="mt-4 p-4 bg-white dark:bg-gray-800 rounded whitespace-pre-wrap">
-                  {ioResult}
-                </pre>
-              )}
-            </section>
+            <Card className="border-green-500/50">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-2xl flex items-center gap-2">
+                    <span className="text-green-500">✅</span>
+                    Correct: I/O-Bound Async
+                  </CardTitle>
+                  <Badge variant="secondary" className="bg-green-500/10 text-green-500 border-green-500/20">
+                    Best Practice
+                  </Badge>
+                </div>
+                <CardDescription>
+                  Network requests are perfect for async/await - UI stays responsive while waiting
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <Button
+                  onClick={handleIoExample}
+                  disabled={ioLoading}
+                  className="w-full sm:w-auto bg-green-600 hover:bg-green-700"
+                >
+                  {ioLoading ? 'Loading...' : 'Fetch Data (I/O)'}
+                </Button>
+                {ioResult && (
+                  <pre className="p-4 bg-muted rounded-lg text-sm whitespace-pre-wrap font-mono border">
+                    {ioResult}
+                  </pre>
+                )}
+              </CardContent>
+            </Card>
 
             {/* ❌ CPU-intensive blocking */}
-            <section className="p-6 border border-red-500 rounded-lg bg-red-50 dark:bg-red-950">
-              <h2 className="text-2xl font-semibold mb-4 text-red-800 dark:text-red-200">
-                ❌ Wrong: CPU-Intensive with Async (Blocks UI)
-              </h2>
-              <p className="mb-4">Heavy computation in async function → UI freezes!</p>
-              <div className="mb-4 flex items-center gap-3">
-                <label htmlFor="blocking-fib" className="text-sm font-medium">
-                  Fibonacci(n):
-                </label>
-                <input
-                  id="blocking-fib"
-                  type="number"
-                  min="1"
-                  max="50"
-                  value={blockingFibN}
-                  onChange={(e) => setBlockingFibN(Number(e.target.value))}
+            <Card className="border-destructive/50">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-2xl flex items-center gap-2">
+                    <span className="text-destructive">❌</span>
+                    Wrong: CPU-Intensive with Async
+                  </CardTitle>
+                  <Badge variant="destructive">Anti-Pattern</Badge>
+                </div>
+                <CardDescription>
+                  Heavy computation in async function still blocks the main thread → UI freezes!
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex flex-wrap items-center gap-3">
+                  <label htmlFor="blocking-fib" className="text-sm font-medium">
+                    Fibonacci(n):
+                  </label>
+                  <Input
+                    id="blocking-fib"
+                    type="number"
+                    min="1"
+                    max="50"
+                    value={blockingFibN}
+                    onChange={(e) => setBlockingFibN(Number(e.target.value))}
+                    disabled={cpuBlockingLoading}
+                    className="w-24"
+                  />
+                  <span className="text-xs text-muted-foreground">(try 38-42 for visible freeze)</span>
+                </div>
+                <Button
+                  onClick={handleCpuBlockingExample}
                   disabled={cpuBlockingLoading}
-                  className="w-20 px-3 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 disabled:opacity-50"
-                />
-                <span className="text-xs text-gray-500">(try 38-42 for visible freeze)</span>
-              </div>
-              <button
-                onClick={handleCpuBlockingExample}
-                disabled={cpuBlockingLoading}
-                className="px-6 py-3 bg-red-600 text-white rounded hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-              >
-                {cpuBlockingLoading ? 'Computing... (UI Frozen)' : 'Calculate Fibonacci (Blocking)'}
-              </button>
-              {cpuBlockingResult && (
-                <pre className="mt-4 p-4 bg-white dark:bg-gray-800 rounded whitespace-pre-wrap">
-                  {cpuBlockingResult}
-                </pre>
-              )}
-            </section>
+                  variant="destructive"
+                  className="w-full sm:w-auto"
+                >
+                  {cpuBlockingLoading ? 'Computing... (UI Frozen)' : 'Calculate Fibonacci (Blocking)'}
+                </Button>
+                {cpuBlockingResult && (
+                  <pre className="p-4 bg-muted rounded-lg text-sm whitespace-pre-wrap font-mono border border-destructive/20">
+                    {cpuBlockingResult}
+                  </pre>
+                )}
+              </CardContent>
+            </Card>
 
             {/* ✅ Web Worker solution */}
-            <section className="p-6 border border-green-500 rounded-lg bg-green-50 dark:bg-green-950">
-              <h2 className="text-2xl font-semibold mb-4 text-green-800 dark:text-green-200">
-                ✅ Correct: Web Worker (Off Main Thread)
-              </h2>
-              <p className="mb-4">Computation in separate thread → UI stays responsive!</p>
-              <div className="mb-4 flex items-center gap-3">
-                <label htmlFor="worker-fib" className="text-sm font-medium">
-                  Fibonacci(n):
-                </label>
-                <input
-                  id="worker-fib"
-                  type="number"
-                  min="1"
-                  max="50"
-                  value={workerFibN}
-                  onChange={(e) => setWorkerFibN(Number(e.target.value))}
+            <Card className="border-green-500/50">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-2xl flex items-center gap-2">
+                    <span className="text-green-500">✅</span>
+                    Correct: Web Worker
+                  </CardTitle>
+                  <Badge variant="secondary" className="bg-green-500/10 text-green-500 border-green-500/20">
+                    Recommended
+                  </Badge>
+                </div>
+                <CardDescription>
+                  Computation runs in separate thread → main thread stays responsive!
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex flex-wrap items-center gap-3">
+                  <label htmlFor="worker-fib" className="text-sm font-medium">
+                    Fibonacci(n):
+                  </label>
+                  <Input
+                    id="worker-fib"
+                    type="number"
+                    min="1"
+                    max="50"
+                    value={workerFibN}
+                    onChange={(e) => setWorkerFibN(Number(e.target.value))}
+                    disabled={workerLoading}
+                    className="w-24"
+                  />
+                  <span className="text-xs text-muted-foreground">(same computation, no freeze)</span>
+                </div>
+                <Button
+                  onClick={handleWorkerExample}
                   disabled={workerLoading}
-                  className="w-20 px-3 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 disabled:opacity-50"
-                />
-                <span className="text-xs text-gray-500">(same computation, no freeze)</span>
-              </div>
-              <button
-                onClick={handleWorkerExample}
-                disabled={workerLoading}
-                className="px-6 py-3 bg-green-600 text-white rounded hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-              >
-                {workerLoading ? 'Computing... (UI Responsive)' : 'Calculate Fibonacci (Web Worker)'}
-              </button>
-              {workerResult && (
-                <pre className="mt-4 p-4 bg-white dark:bg-gray-800 rounded whitespace-pre-wrap">
-                  {workerResult}
-                </pre>
-              )}
-            </section>
+                  className="w-full sm:w-auto bg-green-600 hover:bg-green-700"
+                >
+                  {workerLoading ? 'Computing... (UI Responsive)' : 'Calculate Fibonacci (Web Worker)'}
+                </Button>
+                {workerResult && (
+                  <pre className="p-4 bg-muted rounded-lg text-sm whitespace-pre-wrap font-mono border border-green-500/20">
+                    {workerResult}
+                  </pre>
+                )}
+              </CardContent>
+            </Card>
 
             {/* ✅ Chunked processing solution */}
-            <section className="p-6 border border-yellow-500 rounded-lg bg-yellow-50 dark:bg-yellow-950">
-              <h2 className="text-2xl font-semibold mb-4 text-yellow-800 dark:text-yellow-200">
-                ✅ Alternative: Chunked Processing
-              </h2>
-              <p className="mb-4">Split into chunks → UI does&#39;t completely freeze</p>
-              <div className="mb-4 flex items-center gap-3">
-                <label htmlFor="chunk-fib" className="text-sm font-medium">
-                  Fibonacci(n):
-                </label>
-                <input
-                  id="chunk-fib"
-                  type="number"
-                  min="1"
-                  max="50"
-                  value={chunkFibN}
-                  onChange={(e) => setChunkFibN(Number(e.target.value))}
-                  disabled={chunkLoading}
-                  className="w-20 px-3 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-800 disabled:opacity-50"
-                />
-                <span className="text-xs text-gray-500">(calculates n-5 to n)</span>
-              </div>
-              <button
-                onClick={handleChunkedExample}
-                disabled={chunkLoading}
-                className="px-6 py-3 bg-yellow-600 text-white rounded hover:bg-yellow-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-              >
-                {chunkLoading ? `Computing... ${chunkProgress}%` : 'Calculate Fibonacci (Chunked)'}
-              </button>
-              {chunkLoading && (
-                <div className="mt-4 w-full bg-gray-200 rounded-full h-4">
-                  <div
-                    className="bg-yellow-600 h-4 rounded-full transition-all duration-300"
-                    style={{ width: `${chunkProgress}%` }}
-                  />
+            <Card className="border-yellow-500/50">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-2xl flex items-center gap-2">
+                    <span className="text-yellow-500">⚡</span>
+                    Alternative: Chunked Processing
+                  </CardTitle>
+                  <Badge variant="secondary" className="bg-yellow-500/10 text-yellow-500 border-yellow-500/20">
+                    Alternative
+                  </Badge>
                 </div>
-              )}
-              {chunkResult && (
-                <pre className="mt-4 p-4 bg-white dark:bg-gray-800 rounded whitespace-pre-wrap">
-                  {chunkResult}
-                </pre>
-              )}
-            </section>
+                <CardDescription>
+                  Split work into chunks with yields → UI doesn't completely freeze
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex flex-wrap items-center gap-3">
+                  <label htmlFor="chunk-fib" className="text-sm font-medium">
+                    Fibonacci(n):
+                  </label>
+                  <Input
+                    id="chunk-fib"
+                    type="number"
+                    min="1"
+                    max="50"
+                    value={chunkFibN}
+                    onChange={(e) => setChunkFibN(Number(e.target.value))}
+                    disabled={chunkLoading}
+                    className="w-24"
+                  />
+                  <span className="text-xs text-muted-foreground">(calculates n-5 to n)</span>
+                </div>
+                <Button
+                  onClick={handleChunkedExample}
+                  disabled={chunkLoading}
+                  className="w-full sm:w-auto bg-yellow-600 hover:bg-yellow-700"
+                >
+                  {chunkLoading ? `Computing... ${chunkProgress}%` : 'Calculate Fibonacci (Chunked)'}
+                </Button>
+                {chunkLoading && (
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="text-muted-foreground">Progress</span>
+                      <span className="font-medium">{chunkProgress}%</span>
+                    </div>
+                    <Progress value={chunkProgress} className="h-2" />
+                  </div>
+                )}
+                {chunkResult && (
+                  <pre className="p-4 bg-muted rounded-lg text-sm whitespace-pre-wrap font-mono border border-yellow-500/20">
+                    {chunkResult}
+                  </pre>
+                )}
+              </CardContent>
+            </Card>
           </div>
         </div>
 
-        <div className="mt-12 p-6 bg-gray-100 dark:bg-gray-800 rounded-lg">
-          <h2 className="text-2xl font-semibold mb-4">Key Takeaways</h2>
-          <ul className="space-y-2 list-disc list-inside">
-            <li><strong>async/await</strong> is perfect for I/O waiting (fetch, setTimeout, etc.)</li>
-            <li>DO NOT use for CPU-intensive tasks (blocks main thread)</li>
-            <li>Use <strong>Web Workers</strong> for heavy computations (true parallelization)</li>
-            <li>Alternative: <strong>Chunked processing</strong> (split with setTimeout(0))</li>
-            <li>The counter visually shows UI blocking</li>
-          </ul>
-          <div className="mt-4">
-            <a
-              href="/ASYNC_AWAIT_GUIDE.md"
-              className="text-blue-600 dark:text-blue-400 hover:underline"
-            >
-              📖 Read detailed guide
-            </a>
-          </div>
-        </div>
+        {/* Key Takeaways */}
+        <Card className="mt-12">
+          <CardHeader>
+            <CardTitle className="text-2xl">💡 Key Takeaways</CardTitle>
+            <CardDescription>
+              Understanding when and how to use async/await effectively
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <ul className="space-y-3">
+              <li className="flex gap-3">
+                <span className="text-green-500 mt-0.5">✅</span>
+                <span><strong>async/await</strong> is perfect for I/O-bound operations (fetch, setTimeout, file reads)</span>
+              </li>
+              <li className="flex gap-3">
+                <span className="text-red-500 mt-0.5">❌</span>
+                <span><strong>DO NOT</strong> use async/await alone for CPU-intensive tasks (still blocks main thread)</span>
+              </li>
+              <li className="flex gap-3">
+                <span className="text-green-500 mt-0.5">✅</span>
+                <span>Use <strong>Web Workers</strong> for heavy computations (true parallelization, recommended)</span>
+              </li>
+              <li className="flex gap-3">
+                <span className="text-yellow-500 mt-0.5">⚡</span>
+                <span>Alternative: <strong>Chunked processing</strong> with <code className="px-1.5 py-0.5 bg-muted rounded text-sm">setTimeout(0)</code> (yields to event loop)</span>
+              </li>
+              <li className="flex gap-3">
+                <span className="text-primary mt-0.5">⏱️</span>
+                <span>The counter demonstrates UI responsiveness - if it freezes, the main thread is blocked</span>
+              </li>
+            </ul>
+            <div className="pt-4 border-t">
+              <p className="text-sm text-muted-foreground">
+                💡 <strong>Pro tip:</strong> Always profile your application to identify whether bottlenecks are I/O-bound or CPU-bound before choosing an optimization strategy.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
