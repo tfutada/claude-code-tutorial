@@ -105,6 +105,19 @@ export default function Home() {
               </Card>
             </a>
 
+            <a href="/hooks/closure-demo" className="group">
+              <Card className="h-full hover:shadow-lg hover:border-primary/50 transition-all duration-200">
+                <CardHeader className="space-y-3">
+                  <CardTitle className="group-hover:text-primary transition-colors">
+                    Closures & setState
+                  </CardTitle>
+                  <CardDescription>
+                    Stale closures, functional updates, async callbacks
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </a>
+
             <a href="/async-examples" className="group">
               <Card className="h-full hover:shadow-lg hover:border-primary/50 transition-all duration-200">
                 <CardHeader className="space-y-3">
