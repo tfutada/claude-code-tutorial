@@ -130,6 +130,19 @@ export default function Home() {
                 </CardHeader>
               </Card>
             </a>
+
+            <a href="/rsc-demo" className="group">
+              <Card className="h-full hover:shadow-lg hover:border-destructive/50 transition-all duration-200 border-destructive/20">
+                <CardHeader className="space-y-3">
+                  <CardTitle className="group-hover:text-destructive transition-colors flex items-center gap-2">
+                    🐌 RSC CPU Load Demo
+                  </CardTitle>
+                  <CardDescription>
+                    See how CPU-intensive tasks in Server Components block throughput
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </a>
           </div>
 
           {/* CTA Section */}
