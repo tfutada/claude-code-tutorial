@@ -78,6 +78,21 @@ export default function SlowPage() {
             </a>
           </div>
 
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+            <h2 className="text-2xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
+              Related Demos
+            </h2>
+            <a
+              href="/rsc-demo/pure-function"
+              className="inline-block bg-purple-500 hover:bg-purple-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors mb-4"
+            >
+              🔄 Pure Functions & Double Render Demo
+            </a>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Learn about pure functions and React's StrictMode double render behavior
+            </p>
+          </div>
+
           <div className="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-400 p-4">
             <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
               💡 Solutions for Production Apps
