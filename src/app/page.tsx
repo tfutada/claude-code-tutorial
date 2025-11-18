@@ -118,6 +118,19 @@ export default function Home() {
               </Card>
             </a>
 
+            <a href="/hooks/cascading-rendering" className="group">
+              <Card className="h-full hover:shadow-lg hover:border-primary/50 transition-all duration-200">
+                <CardHeader className="space-y-3">
+                  <CardTitle className="group-hover:text-primary transition-colors">
+                    Cascading Rendering
+                  </CardTitle>
+                  <CardDescription>
+                    How parent re-renders trigger child re-renders, React.memo optimization
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </a>
+
             <a href="/async-examples" className="group">
               <Card className="h-full hover:shadow-lg hover:border-primary/50 transition-all duration-200">
                 <CardHeader className="space-y-3">
