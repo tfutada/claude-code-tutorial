@@ -3,34 +3,74 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 
 // Demo: Different fetch cache options in the same page
+// Using httpbin.org for reliable responses
 
 async function getCachedData() {
   // Force cache - always use cached data
-  // In real app: fetch('url', { cache: 'force-cache' })
-  return {
-    type: 'force-cache',
-    timestamp: new Date().toISOString(),
-    note: 'Cached until revalidation',
+  try {
+    const res = await fetch('https://httpbin.org/uuid', {
+      cache: 'force-cache'
+    })
+    const data = await res.json()
+    return {
+      type: 'force-cache',
+      timestamp: new Date().toISOString(),
+      uuid: data.uuid,
+      note: 'Cached until revalidation',
+    }
+  } catch {
+    return {
+      type: 'force-cache',
+      timestamp: new Date().toISOString(),
+      uuid: 'fetch-failed',
+      note: 'Cached until revalidation',
+    }
   }
 }
 
 async function getFreshData() {
   // No store - always fetch fresh
-  // In real app: fetch('url', { cache: 'no-store' })
-  return {
-    type: 'no-store',
-    timestamp: new Date().toISOString(),
-    note: 'Fresh on every request',
+  try {
+    const res = await fetch('https://httpbin.org/uuid', {
+      cache: 'no-store'
+    })
+    const data = await res.json()
+    return {
+      type: 'no-store',
+      timestamp: new Date().toISOString(),
+      uuid: data.uuid,
+      note: 'Fresh on every request',
+    }
+  } catch {
+    return {
+      type: 'no-store',
+      timestamp: new Date().toISOString(),
+      uuid: 'fetch-failed',
+      note: 'Fresh on every request',
+    }
   }
 }
 
 async function getRevalidatedData() {
-  // Revalidate after 60 seconds
-  // In real app: fetch('url', { next: { revalidate: 60 } })
-  return {
-    type: 'revalidate: 60',
-    timestamp: new Date().toISOString(),
-    note: 'Stale-while-revalidate after 60s',
+  // Revalidate after 10 seconds for demo purposes
+  try {
+    const res = await fetch('https://httpbin.org/uuid', {
+      next: { revalidate: 10 }
+    })
+    const data = await res.json()
+    return {
+      type: 'revalidate: 10',
+      timestamp: new Date().toISOString(),
+      uuid: data.uuid,
+      note: 'Stale-while-revalidate after 10s',
+    }
+  } catch {
+    return {
+      type: 'revalidate: 10',
+      timestamp: new Date().toISOString(),
+      uuid: 'fetch-failed',
+      note: 'Stale-while-revalidate after 10s',
+    }
   }
 }
 
@@ -63,7 +103,7 @@ fetch(url, { cache: 'force-cache' })
 fetch(url, { cache: 'no-store' })
 
 // Option 3: Time-based revalidation
-fetch(url, { next: { revalidate: 60 } })
+fetch(url, { next: { revalidate: 10 } })
 
 // Option 4: Tag-based for on-demand revalidation
 fetch(url, { next: { tags: ['products'] } })`}
@@ -82,6 +122,7 @@ fetch(url, { next: { tags: ['products'] } })`}
             </CardHeader>
             <CardContent className="text-xs">
               <p className="font-mono break-all">{cached.timestamp}</p>
+              <p className="font-mono break-all text-gray-400 mt-1">UUID: {cached.uuid}</p>
               <p className="text-gray-500 mt-2">{cached.note}</p>
             </CardContent>
           </Card>
@@ -95,6 +136,7 @@ fetch(url, { next: { tags: ['products'] } })`}
             </CardHeader>
             <CardContent className="text-xs">
               <p className="font-mono break-all">{fresh.timestamp}</p>
+              <p className="font-mono break-all text-gray-400 mt-1">UUID: {fresh.uuid}</p>
               <p className="text-gray-500 mt-2">{fresh.note}</p>
             </CardContent>
           </Card>
@@ -102,12 +144,13 @@ fetch(url, { next: { tags: ['products'] } })`}
           <Card>
             <CardHeader>
               <CardTitle className="text-sm flex items-center gap-2">
-                revalidate: 60
+                revalidate: 10
                 <Badge>ISR</Badge>
               </CardTitle>
             </CardHeader>
             <CardContent className="text-xs">
               <p className="font-mono break-all">{revalidated.timestamp}</p>
+              <p className="font-mono break-all text-gray-400 mt-1">UUID: {revalidated.uuid}</p>
               <p className="text-gray-500 mt-2">{revalidated.note}</p>
             </CardContent>
           </Card>

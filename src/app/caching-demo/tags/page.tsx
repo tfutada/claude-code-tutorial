@@ -4,32 +4,54 @@ import { Badge } from '@/components/ui/badge'
 import { revalidateTag } from 'next/cache'
 
 // Tag-based caching demo
-async function getPostsData() {
-  // In real app:
-  // const res = await fetch('https://api.example.com/posts', {
-  //   next: { tags: ['posts'] }
-  // })
-  // return res.json()
+// Using httpbin.org for timestamps with cache tags
+// Different endpoints to avoid request memoization
 
-  return {
-    timestamp: new Date().toISOString(),
-    posts: [
-      { id: 1, title: 'First Post' },
-      { id: 2, title: 'Second Post' },
-    ],
+async function getPostsData() {
+  try {
+    const res = await fetch('https://httpbin.org/uuid', {
+      next: { tags: ['posts'] }
+    })
+    const data = await res.json()
+
+    return {
+      timestamp: new Date().toISOString(),
+      uuid: data.uuid,
+      posts: [
+        { id: 1, title: 'First Post' },
+        { id: 2, title: 'Second Post' },
+      ],
+    }
+  } catch {
+    return {
+      timestamp: new Date().toISOString(),
+      uuid: 'fetch-failed',
+      posts: [
+        { id: 1, title: 'First Post' },
+        { id: 2, title: 'Second Post' },
+      ],
+    }
   }
 }
 
 async function getUserData() {
-  // In real app:
-  // const res = await fetch('https://api.example.com/user', {
-  //   next: { tags: ['user', 'profile'] }
-  // })
-  // return res.json()
+  try {
+    const res = await fetch('https://httpbin.org/headers', {
+      next: { tags: ['user', 'profile'] }
+    })
+    const data = await res.json()
 
-  return {
-    timestamp: new Date().toISOString(),
-    user: { name: 'John Doe', email: 'john@example.com' },
+    return {
+      timestamp: new Date().toISOString(),
+      host: data.headers?.Host || 'unknown',
+      user: { name: 'John Doe', email: 'john@example.com' },
+    }
+  } catch {
+    return {
+      timestamp: new Date().toISOString(),
+      host: 'fetch-failed',
+      user: { name: 'John Doe', email: 'john@example.com' },
+    }
   }
 }
 
@@ -87,6 +109,10 @@ async function updatePost() {
         </Card>
 
         {/* Demo Data */}
+        <div className="bg-yellow-50 dark:bg-yellow-900/20 p-4 rounded text-sm mb-4">
+          <strong>How to test:</strong> Click a revalidate button, then refresh the page <strong>twice</strong>.
+          First refresh serves stale data while fetching fresh in background. Second refresh shows new data.
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Card>
             <CardHeader>
@@ -96,7 +122,8 @@ async function updatePost() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-xs font-mono mb-2">{postsData.timestamp}</p>
+              <p className="text-xs font-mono mb-1">{postsData.timestamp}</p>
+              <p className="text-xs font-mono mb-2 text-gray-500">UUID: {postsData.uuid}</p>
               <ul className="text-sm space-y-1">
                 {postsData.posts.map(post => (
                   <li key={post.id}>• {post.title}</li>

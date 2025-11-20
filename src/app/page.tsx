@@ -156,6 +156,19 @@ export default function Home() {
                 </CardHeader>
               </Card>
             </a>
+
+            <a href="/caching-demo" className="group">
+              <Card className="h-full hover:shadow-lg hover:border-primary/50 transition-all duration-200">
+                <CardHeader className="space-y-3">
+                  <CardTitle className="group-hover:text-primary transition-colors">
+                    SSR Caching
+                  </CardTitle>
+                  <CardDescription>
+                    4 cache layers, route config, ISR, revalidateTag, fetch options
+                  </CardDescription>
+                </CardHeader>
+              </Card>
+            </a>
           </div>
 
           {/* CTA Section */}
