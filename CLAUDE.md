@@ -73,13 +73,14 @@ Next.js 16 application with TypeScript, React 19, and Tailwind CSS v4. Uses App 
   - Components are copied into project (not installed as dependency)
 
 ### Component Patterns
-- All pages use `"use client"` directive (SPA architecture)
+- Most pages use `"use client"` directive (SPA architecture)
+- Server components: `page.tsx` (home), RSC demo pages
 - Data fetching via useEffect + fetch (client-side)
 - Loading states embedded in components (no loading.tsx files)
 - Blog pages fetch from JSONPlaceholder API with artificial delays for demo
 
 ## Important Notes
-- Kill existing dev server before starting new one
+- Kill existing dev server before starting new one: `lsof -ti:3000 | xargs kill`
 - Pages with useState/event handlers require `"use client"`
 - TypeScript strict mode enabled
 
@@ -92,3 +93,13 @@ claude mcp add serena -- uvx --from git+https://github.com/oraios/serena serena-
 ```
 
 **Note**: Serena uses Python/uv, NOT npm. Configuration stored in `~/.claude.json` (global).
+
+### Next.js DevTools MCP
+Provides Next.js runtime diagnostics, documentation access, and browser automation for testing.
+
+Install via Claude Code CLI:
+```bash
+claude mcp add next-devtools -- npx -y @anthropic-ai/next-devtools-mcp
+```
+
+**Features**: `nextjs_runtime` for dev server diagnostics, `nextjs_docs` for documentation, `browser_eval` for page testing.
