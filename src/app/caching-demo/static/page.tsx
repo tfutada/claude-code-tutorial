@@ -6,16 +6,13 @@ import { Badge } from '@/components/ui/badge'
 // This page is rendered at build time and cached
 
 async function getData() {
-  // Simulating a fetch - this would be cached
-  const timestamp = new Date().toISOString()
-
-  // In real app:
-  // const res = await fetch('https://api.example.com/data')
-  // return res.json()
+  // This fetch is cached by default (static rendering)
+  const res = await fetch('https://httpbin.org/uuid')
+  const data = await res.json()
 
   return {
-    timestamp,
-    message: 'This data was fetched at build time',
+    uuid: data.uuid,
+    message: 'This UUID was fetched at build time',
   }
 }
 
@@ -62,10 +59,10 @@ export default async function Page() {
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
-              <p><strong>Timestamp:</strong> {data.timestamp}</p>
+              <p><strong>UUID:</strong> {data.uuid}</p>
               <p><strong>Message:</strong> {data.message}</p>
               <p className="text-sm text-gray-500 mt-4">
-                Refresh the page - the timestamp stays the same because this page is cached.
+                Refresh the page - the UUID stays the same because this page is cached.
                 (In dev mode, pages always render fresh)
               </p>
             </div>
